@@ -1,0 +1,255 @@
+---
+title: "Etapa_2_A00839013"
+author: "Juan Pablo Valdes Cardenas"
+date: "2024-09-19"
+output:
+  word_document: default
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Exploracion de base de datos de los años 2019 y 2024
+
+## Datos 
+```{r}
+M20 = read.csv("Datos_molec_2020.csv")
+M24 = read.csv("Datos_molec_2024.csv")
+```
+
+## Diccionarios
+```{r}
+Dicc20 = read.csv("Diccionario_molec_2020.csv")
+Dicc24 = read.csv("Diccionario_molec_2024.csv")
+```
+
+### Año 2020
+```{r}
+str(M20) # muestra la estructura de la base de datos Mp
+names(M20) # muestra la lista de nombres de las variables
+head(M20) # muestra las primeras 6 filas de la base de datos
+## View(M20) # se mostrará una hoja electrónica aparte con los datos
+dim(M20) # cantidad de registros y columnas
+summary(M20) # verificar de manera general si hay datos faltantes
+sum(is.na(M20[ ,2]) | M20[ ,2] == 0) / length(M20[ ,2]) * 100 # porcentaje de datos faltantes en la variable 
+sum(is.na(M20[, 12])) / length(M20[, 2]) * 100 # el 0 no es considerado un dato faltante
+sum(is.na(M20[, 17])) / length(M20[, 2]) * 100
+sum(is.na(M20[, 11])) / length(M20[, 2]) * 100
+sum(is.na(M20[, 22])) / length(M20[, 2]) * 100
+sum(is.na(M20[ ,13]) | M20[ ,13] == 0) / length(M20[ ,2]) * 100 
+sum(is.na(M20[ ,14]) | M20[ ,14] == 0) / length(M20[ ,2]) * 100
+```
+
+### Año 2024
+```{r}
+str(M24) 
+names(M24) 
+head(M24) 
+## View(M24) 
+dim(M24) 
+summary(M24)
+sum(is.na(M24[ ,2]) | M24[ ,2] == 0 / length(M24[ ,2])) * 100
+sum(is.na(M24[, 12])) / length(M24[, 2]) * 100
+sum(is.na(M24[, 11])) / length(M24[, 2]) * 100
+sum(is.na(M24[, 17])) / length(M24[, 2]) * 100
+sum(is.na(M24[, 22])) / length(M24[, 2]) * 100
+sum(is.na(M24[ ,13]) | M24[ ,13] == 0) / length(M24[ ,2]) * 100
+sum(is.na(M24[ ,14]) | M24[ ,14] == 0) / length(M24[ ,2]) * 100
+```
+
+#### Dimension de los datos
+```{r}
+cat("Dimensión del dataset del año 2020 = ",dim(M20),"\n")
+cat("Dimensión del dataset del año 2024 = ",dim(M24),"\n")
+```
+
+# Describir las variables
+## 1.⁠ ⁠*Entidad (Variable 2)*: Esta variable nos permite identificar la región geográfica o estado en México al que pertenece cada encuestado, lo cual es fundamental para analizar las diferencias entre regiones.
+
+## 2.⁠ ⁠*Nivel de instrucción (Variable 12)*: El nivel educativo es un factor socioeconómico clave que influye en los hábitos de lectura. Las personas con mayor nivel de instrucción tienden a leer más.
+
+## 3.⁠ ⁠*¿En los últimos doce meses, leyó LIBROS? (Variable 17)*: Esta variable permite medir los hábitos de lectura de libros en la población, un indicador central en el análisis de los hábitos de lectura.
+
+## 4.⁠ ⁠*¿Cuántos libros leyó en los últimos doce meses? (Variable 22)*: Proporciona una medida cuantitativa de los hábitos de lectura, lo que facilita la comparación entre regiones.
+
+## 5. *¿Hasta que año o grado aprobó en la escuela? (Variable 13)*:Esta variable proporciona el nivel educativo máximo alcanzado por el encuestado. Es clave para entender cómo el nivel de escolaridad influye en otros aspectos de su vida, como los hábitos de lectura. 
+
+## 6. *Edad (Variable 35)*: Esta variable proporciona el rango de edad de la gente encuestada. Esta variable es importante para entender que edades son mas lectoras. 
+
+## 7. *Condición de actividad (Variable 14)*: Esta variable nos indica si la persona estuvo ocupada laboralmente, desempleada, o dedicada a otras actividades. Es un factor socioeconómico que podría influir en los hábitos de lectura.
+
+# Dataframe de las variantes del año 2019 y 2024
+```{r}
+M20final = M20[, c(2, 12, 17, 22, 13, 14, 11)]
+M20final = na.omit(M20final) # Eliminar filas con NA en las columnas seleccionadas
+M20final # Verificar los datos limpios
+
+M24final = M24[, c(2, 12, 17, 22, 13, 14, 11)]
+M24final = na.omit(M24final) 
+M24final 
+
+summary(M20final)
+summary(M24final)
+
+cat("Nueva dimensión del dataset del año 2020 solo de las variables necesitadas = ",dim(M20final),"\n")
+cat("Nueva dimensión del dataset del año 2024 solo de las variables necesitadas = ",dim(M24final),"\n")
+```
+
+# Tipo de Variable 
+## Cualitativo
+### 2
+```{r}
+cat("2020", "\n")
+Proporción_categoria__20 = prop.table(table(M20final$entidad))
+Proporción_categoria__20
+
+cat("------------------------------------------------------------------------------------------------------------------------------", "\n")
+cat("2024", "\n")
+Proporción_categoria__24 = prop.table(table(M24final$entidad))
+Proporción_categoria__24
+
+hist(M20final$entidad,col="green1", main = "ENTIDAD FEDERATIVA", xlab = ".", ylab = ".")
+hist(M24final$entidad,col="green4", main = "ENTIDAD FEDERATIVA", xlab = ".", ylab = ".")
+```
+
+### 14
+```{r}
+cat("2020", "\n")
+Proporción_categoria___20 = prop.table(table(M20final$cond_act))
+Proporción_categoria___20
+
+cat("--------------------------------------", "\n")
+cat("2024", "\n")
+
+Proporción_categoria_24 = prop.table(table(M24final$cond_act))
+Proporción_categoria_24
+
+hist(M20final$cond_act,col="darkslategray", main = "Condición de actividad 2020", xlab = ".", ylab = ".")
+hist(M24final$cond_act,col="darkslategray2", main = "Condición de actividad 2024", xlab = ".", ylab = ".")
+```
+
+### 17 
+```{r}
+mediana____20 = median(M20final$p3_1)
+Proporción_categoria____20 = prop.table(table(M20final$p3_1))
+cat("Mediana año 2020 = ", mediana____20, "\n")
+Proporción_categoria____20
+
+cat("--------------------------------------", "\n")
+
+mediana____24 = median(M24final$p3_1)
+Proporción_categoria____24 = prop.table(table(M24final$p3_1))
+cat("Mediana año 2024 = ", mediana____24, "\n")
+Proporción_categoria____24
+
+pie(table(M20final$p3_1),col = c("yellow", "deepskyblue1", "springgreen4"))
+pie(table(M24final$p3_1),col = c("yellow", "deepskyblue1", "springgreen4"))
+```
+
+
+### 13
+```{r}
+cat("NIVEL", "\n")
+cat("2020", "\n")
+Proporción_categoria______20 = prop.table(table(M20final$nivel))
+Proporción_categoria______20
+
+cat("--------------------------------------", "\n")
+cat("2024", "\n")
+
+Proporción_categoria______24 = prop.table(table(M24final$nivel))
+Proporción_categoria______24
+
+cat("AÑ0", "\n")
+cat("2020", "\n")
+Proporción_categoria______20 = prop.table(table(M20final$anio))
+Proporción_categoria______20
+
+cat("--------------------------------------", "\n")
+cat("2024", "\n")
+
+Proporción_categoria______24 = prop.table(table(M24final$anio))
+Proporción_categoria______24
+
+pie(table(M20final$anio),col = c("yellow", "deepskyblue2", "springgreen3", "steelblue4", "tomato1", "orange2", "black"))
+pie(table(M24final$anio),col = c("yellow", "deepskyblue2", "springgreen3", "steelblue4", "tomato1", "orange2", "black"))
+```
+
+## Cuantitiativo
+### 22
+```{r}
+library("e1071") # Necesitas instalar previamente esta biblioteca
+
+# M20final$p4
+media20 = mean(M20final$p4)
+mediana20 = median(M20final$p4)
+ds20 = sd(M20final$p4)
+sesgo20 = skewness(M20final$p4)
+curtosis20 = kurtosis(M20final$p4)
+
+cat("Media del año 2020 = ", media20, "\n")
+cat("Mediana del año 2020 =", mediana20, "\n")
+cat("Desviación Estándar del año 2020 = ", ds20, "\n")
+cat("El sesgo del año del 2020 =", sesgo20, "\n")
+cat("La curtosis del año 2020 =", curtosis20, "\n")
+
+cat("--------------------------------------", "\n")
+
+# M24final$p4
+media24 = mean(M24final$p4)
+mediana24 = median(M24final$p4)
+ds24 = sd(M24final$p4)
+sesgo24 = skewness(M24final$p4)
+curtosis24 = kurtosis(M24final$p4)
+
+cat("Media del año 2024 = ", media24, "\n")
+cat("Mediana del año 2024 =", mediana24, "\n")
+cat("Desviación Estándar del año 2024 =", ds24, "\n")
+cat("El sesgo del año del 2024 =", sesgo24, "\n")
+cat("La curtosis del año 2024 =", curtosis24, "\n")
+```
+## Grafica de todos los datos. 
+```{r}
+boxplot(M20final$p4, M24final$p4, col = c("orange", "green"), main = "¿Cuántos libros leyó en los últimos doce mese", xlab = "Año", ylab = "Número de libros leídos", names = c("2020", "2024"), border = "black", lwd = 1.5) 
+```
+
+### 11
+```{r}
+library("e1071") # Necesitas instalar previamente esta biblioteca
+
+# M20final$p4
+media_20 = mean(M20final$edad)
+mediana_20 = median(M20final$edad)
+ds_20 = sd(M20final$edad)
+sesgo_20 = skewness(M20final$edad)
+curtosis_20 = kurtosis(M20final$edad)
+
+cat("Media del año 2020 = ", media_20, "\n")
+cat("Mediana del año 2020 =", mediana_20, "\n")
+cat("Desviación Estándar del año 2020 = ", ds_20, "\n")
+cat("El sesgo del año del 2020 =", sesgo_20, "\n")
+cat("La curtosis del año 2020 =", curtosis_20, "\n")
+
+cat("--------------------------------------", "\n")
+
+# M24final$p4
+media_24 = mean(M24final$edad)
+mediana_24 = median(M24final$edad)
+ds_24 = sd(M24final$edad)
+sesgo_24 = skewness(M24final$edad)
+curtosis_24 = kurtosis(M24final$edad)
+
+cat("Media del año 2024 = ", media_24, "\n")
+cat("Mediana del año 2024 =", mediana_24, "\n")
+cat("Desviación Estándar del año 2024 =", ds_24, "\n")
+cat("El sesgo del año del 2024 =", sesgo_24, "\n")
+cat("La curtosis del año 2024 =", curtosis_24, "\n")
+```
+
+```{r}
+boxplot(M20final$edad, M24final$edad, col = c("orange", "lightblue"), main = "RANGO DE EDAD", xlab = "Año", ylab = "Número de libros leídos", names = c("2020", "2024"), border = "black", lwd = 1.5) 
+```
+
