@@ -1,6 +1,6 @@
 ---
-title: "Etapa_2_A00839013"
-author: "Juan Pablo Valdes Cardenas"
+title: "Etapa_2_A00838606"
+author: "Santiago Dueñas Sanchez"
 date: "2024-09-19"
 output:
   word_document: default
